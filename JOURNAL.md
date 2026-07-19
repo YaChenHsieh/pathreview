@@ -26,11 +26,17 @@
 
 ## Week 8 — Reproduction & Solution Planning
 
-**Reproduction steps and summary:**
+**Reproduction commit link:** https://github.com/ascherj/pathreview/commit/c3ee3338b98d55b6fc9d1cebf2f338e9df275cd4
 
+**Reproduction steps and summary:**
 1. Check out to `docs/89-api-reference-doc-missing-request-body` branch.
 2. Open `docs/API.md`.
 3. Under the Profiles and Reviews sections, verify that `POST /profiles` and `POST /reviews` only have one-line endpoint summaries. The documentation does not include request body fields, data types, descriptions, content types, or example values.
 4. Open Swagger UI at `http://localhost:8000/docs` and confirm that FastAPI already exposes the request body definitions: `multipart/form-data` for `POST /profiles` and `application/json` using the `ReviewCreate` schema for `POST /reviews`.
-
 This confirms that the API implementation already defines the request bodies, but the information is still missing from `docs/API.md`. Therefore, the issue is limited to the documentation.
+
+**PLAN.md link:** https://github.com/ascherj/pathreview/commit/e466dd9f2d68a9e4986bca2374e01f033451850e
+
+**Walkthrough video (recommended):** [link to your Loom video, ≤2 min — shared for early feedback]
+
+**Blockers or open questions:**

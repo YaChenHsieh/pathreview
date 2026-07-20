@@ -40,3 +40,39 @@ This confirms that the API implementation already defines the request bodies, bu
 **Walkthrough video (recommended):** [link to your Loom video, ≤2 min — shared for early feedback]
 
 **Blockers or open questions:**
+
+## Week 9 — Solution building & PR submission
+
+### Check-in 1 (mid-week)
+
+**Current progress:**
+Completed PLAN.md sub-tasks 1–5.
+
+- Added the `multipart/form-data` fields for `POST /profiles`—`github_username`, `portfolio_url`, and `resume_file`—and documented that all three fields are optional. 
+- Also added the `application/json` request body for `POST /reviews`, including the required UUID-formatted `profile_id`. 
+- The updated sections include field descriptions and validation constraints, accepted resume MIME types, relevant `401` and `422` error responses, bearer-token authentication requirements, and example requests aligned with the route implementations and the `ReviewCreate` schema.
+- Completed sub-task 5 by generating the OpenAPI schema with `app.openapi()` from `api/main.py` in the project's `.venv` and comparing it with the updated `docs/API.md`. The generated schema confirmed that all `POST /profiles` fields are optional, `POST /reviews` requires a UUID-formatted `profile_id`, and both endpoints require OAuth2 bearer-token authentication. No discrepancies were found.
+
+**Next steps:**
+Explore whether automated tests can be added to compare the request body definitions in the generated OpenAPI schema with the corresponding documentation in `docs/API.md`, helping ensure that the documented fields, content types, and required/optional status remain aligned with the implementation.
+
+**Blockers:**
+None.
+
+---
+
+### Check-in 2 (end of week)
+
+**PR link:** [link to your submitted pull request]
+
+**Branch:** [the branch name you worked on, e.g. `fix/123-short-description`]
+
+**What you built:**
+[1–3 sentences summarizing what your fix does and how it works]
+
+**Tests added or updated:**
+[Which test files did you touch? What do they cover?]
+
+**Self-review confirmation:** [ ] make check passes  [ ] make test-unit passes
+
+**Draft PR feedback received from:** [name or Discord handle, or "none"]

@@ -65,14 +65,29 @@ None.
 
 **PR link:** [link to your submitted pull request]
 
-**Branch:** [the branch name you worked on, e.g. `fix/123-short-description`]
+**Branch:** docs/89-api-reference-doc-missing-request-body
 
 **What you built:**
-[1–3 sentences summarizing what your fix does and how it works]
+- Updated `docs/API.md` to document the request bodies for `POST /profiles` and `POST /reviews`, including content types, field names, required and optional status, validation constraints, authentication requirements, example requests, and relevant error responses. 
+- I also added an automated documentation sync test that generates the FastAPI OpenAPI schema and checks that the request-body field names remain documented and that the expected required fields and content types do not change unexpectedly.
 
 **Tests added or updated:**
-[Which test files did you touch? What do they cover?]
+Originally added `tests/unit/test_api_docs_sync.py`, a schema-based test that generated the OpenAPI schema via `app.openapi()` and verified that all request-body field names from the profile and review schemas appear in `docs/API.md`, that `POST /profiles` has no required fields and `POST /reviews` requires `profile_id`, and that each endpoint uses the expected content type. This version was blocked from committing (see Blockers below) and was replaced with `tests/unit/test_api_docs.py`, a string-match version with no dependency on importing `api.main`. It asserts that `docs/API.md` mentions the expected field names, content types (`multipart/form-data`, `application/json`), and example values for both endpoints.
 
-**Self-review confirmation:** [ ] make check passes  [ ] make test-unit passes
+Both versions are intentionally limited to detecting schema/documentation drift, not the accuracy of prose (descriptions, examples). The string-match version is the weaker of the two: it cannot verify required/optional status against the real schema and its field list must be kept in sync by hand, whereas the schema-based version derives that directly from `app.openapi()`. The schema-based version remains the better long-term test — see PLAN.md Follow-up for the plan to revisit it once the mypy config question below is resolved.
+
+**Self-review confirmation:** [v] make check passes  [v] make test-unit passes
+
+**Blockers:**
+Update: Temporarily removed `tests/unit/test_api_docs_sync.py`.
+The new test imports `app` from `api.main` to inspect the generated OpenAPI schema. This causes the project's `mypy` pre-commit hook to fail because the default `follow_imports = normal` setting makes mypy recursively type-check modules imported through `api.main`, including `api/routes/*.py` and `core/services/*.py`.
+
+This surfaces approximately 44 pre-existing type errors that are unrelated to the documentation change or the new test. No existing test imports `api.main` directly, so this appears to be the first test to expose the issue through the current mypy configuration.
+
+I confirmed that running mypy with `--follow-imports=silent` prevents mypy from recursively reporting errors from the imported application modules, and no errors are reported for the test file itself.
+
+One possible solution is to add a scoped `[[tool.mypy.overrides]]` entry in `pyproject.toml` that sets follow_imports = "silent" for the relevant `api.*` and `core.*` modules. However, because this would modify shared type-checking behavior and could affect CI beyond this test, I would like to confirm the approach with the maintainers or reviewers before changing the mypy configuration.
+
+**Resolution for this PR:** Landed `tests/unit/test_api_docs.py` (string-match against `docs/API.md` text) instead, since it has no import dependency on `api.main` and commits cleanly. Logged the schema-based version as a follow-up in PLAN.md to revisit once the mypy config question is settled with maintainers.
 
 **Draft PR feedback received from:** [name or Discord handle, or "none"]

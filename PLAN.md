@@ -100,3 +100,11 @@ Specific inputs/states the documentation should describe the behavior for, so th
 - Missing or invalid bearer token on either endpoint → 401 with `WWW-Authenticate: Bearer`.
 - `POST /reviews` called with a non-existent or malformed `profile_id`.
 
+### Follow-up (out of scope for this issue)
+
+- **Automated docs-drift test — attempted, blocked, landed an interim version.** Originally planned as a schema-based test (`tests/unit/test_api_docs_sync.py`) generating `app.openapi()` and asserting every request-body field name for `POST /profiles` and `POST /reviews` appears in `docs/API.md`, with the set of `required` field names for each schema checked against an explicit expected set. This version was blocked from committing: it imports `api.main.app`, and mypy's default `follow_imports = normal` recursively type-checks the whole app module graph, surfacing ~44 pre-existing, unrelated type errors and failing the pre-commit hook.
+
+  Landed instead: `tests/unit/test_api_docs.py`, a string-match version with no import dependency on `api.main` — it reads `docs/API.md` as text and asserts the known field names, content types, and example values are present. This commits cleanly but is a weaker guard: it can't detect a field's required/optional status changing, and its field list must be kept in sync by hand rather than being derived from the schema.
+
+  **Revisit:** the schema-based version is still the better long-term test (self-updating from the real schema, catches required/optional drift). Blocked on deciding how to let tests import app modules without re-triggering full mypy checks of their pre-existing issues — e.g. a scoped `[[tool.mypy.overrides]]` entry (`follow_imports = "silent"` for `api.*`/`core.*`) — which needs maintainer sign-off since it changes shared mypy config, not just this test file.
+

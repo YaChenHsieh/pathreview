@@ -63,7 +63,7 @@ None.
 
 ### Check-in 2 (end of week)
 
-**PR link:** [link to your submitted pull request]
+**PR link:** https://github.com/YaChenHsieh/pathreview/pull/1
 
 **Branch:** docs/89-api-reference-doc-missing-request-body
 
@@ -90,4 +90,4 @@ One possible solution is to add a scoped `[[tool.mypy.overrides]]` entry in `pyp
 
 **Resolution for this PR:** Landed `tests/unit/test_api_docs.py` (string-match against `docs/API.md` text) instead, since it has no import dependency on `api.main` and commits cleanly. Logged the schema-based version as a follow-up in PLAN.md to revisit once the mypy config question is settled with maintainers.
 
-**Draft PR feedback received from:** [name or Discord handle, or "none"]
+**Draft PR feedback received from:** "none"

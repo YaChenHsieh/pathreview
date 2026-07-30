@@ -91,3 +91,37 @@ One possible solution is to add a scoped `[[tool.mypy.overrides]]` entry in `pyp
 **Resolution for this PR:** Landed `tests/unit/test_api_docs.py` (string-match against `docs/API.md` text) instead, since it has no import dependency on `api.main` and commits cleanly. Logged the schema-based version as a follow-up in PLAN.md to revisit once the mypy config question is settled with maintainers.
 
 **Draft PR feedback received from:** "none"
+
+## Week 10 — Iteration & reflection
+
+### Reviewer feedback
+
+**Feedback received:** [ ] Yes  [X] No — still awaiting review
+
+**Summary of feedback:**
+I have not received any reviewer feedback yet. My pull request is still awaiting review.
+
+**How you responded:**
+Since no feedback has been provided so far, I have not needed to make any additional changes. I will review and respond to any comments once they are received.
+
+---
+
+### Reflection
+
+**What was harder than you expected?**
+Designing the test cases was harder than I expected. I wanted to create a robust automated test that would verify whether the request body documentation in docs/API.md remained consistent with the application's generated OpenAPI schema. However, importing the application in the test exposed existing module import and type-checking issues that were unrelated to my documentation change. Because of this blocker, I had to reconsider the testing approach and explore other ways to verify the documentation accurately without introducing unrelated failures.
+
+**What did you learn about working in a large codebase?**
+I learned that it is important to begin by creating a clear map of the relevant parts of the codebase. For an API endpoint, this may involve reviewing the schemas, routes, services, authentication dependencies, and related models, and then tracing how data flows through them. Following this process helped me understand which file was the actual source of truth, which related files needed to be examined, and how to reproduce and resolve the issue more efficiently. This structured approach can save a significant amount of time when working in a large codebase.
+
+**How did AI tools help — and where did they fall short?**
+AI helped me identify several blind spots and develop a stronger testing plan. In particular, it helped me think beyond simply checking that the documentation had been updated and consider a more robust test that could detect future differences between the OpenAPI schema and docs/API.md.
+However, the proposed testing approach encountered blockers caused by existing module import and type-checking issues in the codebase. AI could suggest possible solutions, but it could not determine which broader configuration changes would be acceptable to the maintainers. I still needed to inspect the repository, verify the source of the failures, and decide which changes were appropriate for the scope of my issue. Overall, AI helped make my open-source contribution more thorough, but human judgment was still necessary.
+
+**What would you do differently if you started over?**
+I would think more carefully about issue selection. At the beginning, I chose a documentation issue because I wanted to start with a relatively approachable contribution. Although the issue was valuable and helped me learn the contribution process, I was also interested in making a code change and gaining more experience tracing bugs through a large codebase.
+If I started over, I might choose a small code-related issue that still had a clearly defined scope. However, through the classes and the Week 7–10 project process, I still gained useful experience in exploring an unfamiliar repository, identifying sources of truth, reproducing an issue, planning a solution, performing verification, and preparing a pull request.
+
+**What are you most proud of from this module?**
+I am most proud of the robust testing idea that I developed with the help of AI. The proposed test would compare the documented request fields with the application's generated OpenAPI schema, helping detect future documentation drift. Even though I was unable to keep the test because it exposed unrelated module import and type-checking issues, developing the approach helped me understand how automated tests can improve the reliability and maintainability of a system.
+This experience also showed me that documentation changes are not necessarily minor. Accurate API documentation is especially important in modern codebases, where both developers and AI-assisted tools may rely on documented contracts to understand, verify, and modify the system. A well-designed test can help ensure that the documentation continues to reflect the actual implementation. Developing that testing plan is one of the accomplishments I am most proud of from this module.
